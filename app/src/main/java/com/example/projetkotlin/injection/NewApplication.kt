@@ -12,7 +12,7 @@ open class NewApplication : Application(){
             // Android context
             androidContext(this@NewApplication)
             // modules
-            modules(presentationModule)
+            modules(presentationModule, DataModule, DomainModule)
         }
     }
 
