@@ -11,32 +11,57 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@Suppress("IMPLICIT_CAST_TO_ANY")
 class MainViewModel(
     private val createUserUseCase: CreateUserUseCase,
     private val getUserUseCase: GetUserUseCase
 ) :ViewModel(){
 
-   // val text: MutableLiveData<String> = MutableLiveData()
     val loginLiveData: MutableLiveData<LoginStatus> = MutableLiveData()
+    val createData: MutableLiveData<createStatus> = MutableLiveData()
+
+
 
     fun onClickedLogin(emailUser: String, password: String){
-        viewModelScope.launch(Dispatchers.IO) {
-           val user  =  getUserUseCase.invoke(emailUser)
-            //createUserUseCase.invoke((User("test")))
-           // val user: User = getUserUseCase.invoke("test")
-            val loginStatus = if(user !=null){
-                LoginSuccess(user.email)
-            } else {
-                LoginError
-            }
+            viewModelScope.launch(Dispatchers.IO) {
+                val user = getUserUseCase.invoke(emailUser, password)
+                val loginStatus = if (user != null) {
+                        LoginSuccess(user.email, user.password)
+                }else {
 
-            withContext(Dispatchers.Main) {
-                loginLiveData.value = loginStatus
+                    LoginErrorUser
+                }
 
+                withContext(Dispatchers.Main) {
+                    loginLiveData.value = loginStatus
+                }
             }
         }
 
 
+
+
+
+    fun onClickedCreate(emailUser: String, password: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            val user = getUserUseCase.invoke(emailUser, password)
+            val createStatus = if (user == null) {
+                createSuccess(emailUser)
+
+            }else {
+                createError
+            }
+
+            if (createStatus == createSuccess(emailUser)){
+                createUserUseCase.invoke(User(emailUser,password))
+            }
+
+            withContext(Dispatchers.Main) {
+                createData.value = createStatus
+            }
+        }
     }
 
-}
+
+    }
+
