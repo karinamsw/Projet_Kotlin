@@ -1,4 +1,4 @@
-package com.example.projetkotlin.Details
+package com.example.projetkotlin.Presentation.Details
 
 import com.example.projetkotlin.Domain.entity.Elephant
 

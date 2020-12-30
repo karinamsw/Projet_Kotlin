@@ -3,13 +3,14 @@ package com.example.projetkotlin.Presentation.main
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.observe
-import com.example.projetkotlin.Details.DetailsMainActivity
+import com.example.projetkotlin.Presentation.Details.DetailsMainActivity
+import com.example.projetkotlin.Presentation.Register.RegisterActivity
+import com.example.projetkotlin.Presentation.Register.createError
+import com.example.projetkotlin.Presentation.Register.createSuccess
 import com.example.projetkotlin.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
-import java.util.Observer
 import androidx.lifecycle.Observer as Observer1
 
 class MainActivity : AppCompatActivity() {
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         login_button.setOnClickListener {
             mainViewModel.onClickedLogin(login_edit.text.toString().trim(), password_edit.text.toString() )
         }
-
+/*
         mainViewModel.createData.observe(this, androidx.lifecycle.Observer {
             when(it){
                 is createSuccess -> {
@@ -57,9 +58,13 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+ */
+
 
         create_account_button.setOnClickListener{
-            mainViewModel.onClickedCreate(login_edit.text.toString().trim(), password_edit.text.toString())
+            //mainViewModel.onClickedCreate(login_edit.text.toString().trim(), password_edit.text.toString())
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
         }
 
 

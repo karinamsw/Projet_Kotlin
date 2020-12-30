@@ -1,7 +1,6 @@
 package com.example.projetkotlin.Data.API
 
-import com.example.projetkotlin.Details.RestElephantResponse
-import com.example.projetkotlin.Domain.entity.Elephant
+import com.example.projetkotlin.Presentation.Details.RestElephantResponse
 import retrofit2.Call
 import retrofit2.http.GET
 

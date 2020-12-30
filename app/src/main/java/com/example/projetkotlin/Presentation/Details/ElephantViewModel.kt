@@ -1,4 +1,4 @@
-package com.example.projetkotlin.Details
+package com.example.projetkotlin.Presentation.Details
 
 import android.content.Context
 import android.util.Log

@@ -1,4 +1,4 @@
-package com.example.projetkotlin.Details
+package com.example.projetkotlin.Presentation.Details
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,8 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projetkotlin.Domain.entity.Elephant
 import com.example.projetkotlin.R
-import okio.Utf8.size
-import java.nio.file.Files.size
+import com.squareup.picasso.Picasso
 
 class ListAdapter (private val list: List<Elephant>) : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
     // Provide a suitable constructor (depends on the kind of dataset)
@@ -69,7 +68,7 @@ internal constructor(
     ) {
 
         val elephant : Elephant = list.get(position)
-        //Picasso.get().load(currentElephant.Image()).resize(300, 300).into(holder.mImage)
+        Picasso.get().load(elephant.image).resize(300, 300).into(holder.mImage)
         holder.txtHeader.text = elephant.name
         holder.txtFooter.text = elephant.sex
         holder.mImage.setImageResource(getCustomedIdentifier(holder, elephant.name!!))

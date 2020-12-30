@@ -1,4 +1,4 @@
-package com.example.projetkotlin.Presentation.main
+package com.example.projetkotlin.Presentation.Register
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -6,42 +6,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.projetkotlin.Domain.UseCase.CreateUserUseCase
 import com.example.projetkotlin.Domain.UseCase.GetUserUseCase
 import com.example.projetkotlin.Domain.entity.User
-import com.example.projetkotlin.Presentation.Register.createError
-import com.example.projetkotlin.Presentation.Register.createStatus
-import com.example.projetkotlin.Presentation.Register.createSuccess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@Suppress("IMPLICIT_CAST_TO_ANY")
-class MainViewModel(
+class RegisterViewModel (
     private val createUserUseCase: CreateUserUseCase,
     private val getUserUseCase: GetUserUseCase
-) :ViewModel(){
-
-    val loginLiveData: MutableLiveData<LoginStatus> = MutableLiveData()
+) : ViewModel(){
     val createData: MutableLiveData<createStatus> = MutableLiveData()
-
-
-
-    fun onClickedLogin(emailUser: String, password: String){
-            viewModelScope.launch(Dispatchers.IO) {
-                val user = getUserUseCase.invoke(emailUser, password)
-                val loginStatus = if (user != null) {
-                        LoginSuccess(user.email, user.password)
-                }else {
-
-                    LoginErrorUser
-                }
-
-                withContext(Dispatchers.Main) {
-                    loginLiveData.value = loginStatus
-                }
-            }
-        }
-
-
-
 
 
     fun onClickedCreate(emailUser: String, password: String){
@@ -70,5 +43,7 @@ class MainViewModel(
     }
 
 
-    }
+
+}
+
 

@@ -19,7 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Details.DetailsMainActivity" />
+        <activity android:name="com.example.projetkotlin.Presentation.Details.DetailsMainActivity" />
+        <activity android:name="com.example.projetkotlin.Presentation.Register.RegisterActivity" />
     </application>
 
 </manifest>

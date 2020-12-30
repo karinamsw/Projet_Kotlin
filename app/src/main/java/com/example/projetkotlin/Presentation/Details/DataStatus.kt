@@ -1,4 +1,4 @@
-package com.example.projetkotlin.Details
+package com.example.projetkotlin.Presentation.Details
 
 sealed class DataStatus
 object DataIsEmpty : DataStatus()

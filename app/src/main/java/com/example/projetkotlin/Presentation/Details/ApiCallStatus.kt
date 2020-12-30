@@ -1,4 +1,4 @@
-package com.example.projetkotlin.Details
+package com.example.projetkotlin.Presentation.Details
 
 sealed class ApiCallStatus
 object ApiCallSuccess : ApiCallStatus()
