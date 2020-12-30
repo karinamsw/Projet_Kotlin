@@ -2,14 +2,17 @@ package com.example.projetkotlin.Details
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projetkotlin.R
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.koin.android.ext.android.inject
 
-public class DetailsMainActivity : AppCompatActivity() {
-    var recyclerView: RecyclerView? = null
-    var mAdapter: ListAdapter? = null
-    var layoutManager: RecyclerView.LayoutManager? = null
+class DetailsMainActivity : AppCompatActivity() {
+    val elephantViewModel : ElephantViewModel by inject()
+
+
 
    // private var controller: MainController? = null
 
@@ -17,54 +20,45 @@ public class DetailsMainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recycler)
 
-        recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        elephantViewModel.onStart(this)
+        fun showList() {
+            var recyclerView: RecyclerView = findViewById(R.id.recycler_view)
+            var layoutManager = LinearLayoutManager(this)
+            recyclerView.setHasFixedSize(true)
+            recyclerView.layoutManager = layoutManager
+            elephantViewModel.showList(elephantViewModel.eleph.value!!, recyclerView, layoutManager)
 
-        recyclerView!!.setHasFixedSize(true)
+        }
 
-        layoutManager = LinearLayoutManager(this)
-        recyclerView!!.layoutManager = layoutManager
-        val input: MutableList<String> = ArrayList()
-        for (i in 1..10) {
-            input.add("Test$i")
-        } // define an adapter
-
-        mAdapter = ListAdapter(input)
-        recyclerView!!.setAdapter(mAdapter)
-
-       /* controller = MainController(
-            this,
-            GsonBuilder().setLenient().create(),
-            getSharedPreferences("application_elephant", Context.MODE_PRIVATE)
-        )
-        controller!!.onStart()
-
-        */
-    }
-
-/*
-    fun showList(elephantList: List<Elephant?>?) {
-        recyclerView = findViewById<View>(R.id.recycler_view) as RecyclerView?
-        recyclerView!!.setHasFixedSize(true)
-        layoutManager = LinearLayoutManager(this)
-        recyclerView!!.layoutManager = layoutManager
-        mAdapter = ListAdapter(elephantList as List<Elephant>, object : ListAdapter.OnItemClickListner() {
-            override fun onItemClick(item: Elephant?) {
-                controller!!.onItemClick(item)
+        elephantViewModel.dataStatus.observe(this, Observer {
+            when (it) {
+                DataIsEmpty -> {
+                    elephantViewModel.makeApiCall()
+                }
+                DataSetIsNotEmpty -> {
+                    showList()
+                }
             }
         })
-        recyclerView!!.adapter = mAdapter
+
+
+        elephantViewModel.apiCallResul.observe(this, Observer {
+            when (it) {
+                ApiCallSuccess -> {
+                    elephantViewModel.saveList(elephantViewModel.eleph.value!!, applicationContext)
+                    showList()
+                }
+                ApiCallError -> {
+                    MaterialAlertDialogBuilder(this)
+                        .setTitle("Error")
+                        .setMessage("Erreur appelle API")
+                        .setPositiveButton("OK"){ dialog, which ->  dialog.dismiss()}
+                        .show()
+                }
+            }
+        })
+
+
+
     }
-
-
-    fun showError() {
-        Toast.makeText(getApplicationContext(), "API Error", Toast.LENGTH_SHORT).show()
-    }
-
-    fun navigateToDetails(elephant: Elephant?) {
-        val myIntent = Intent(this.DetaislViewModel, DetailActivity::class.java)
-        myIntent.putExtra("elephantKey", Singletons.getGson().toJson(elephant))
-        this.DetailsViewModel.startActivity(myIntent)
-    }
-
- */
 }

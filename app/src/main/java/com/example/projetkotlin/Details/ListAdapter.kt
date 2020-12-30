@@ -1,38 +1,45 @@
 package com.example.projetkotlin.Details
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.projetkotlin.Domain.entity.Elephant
 import com.example.projetkotlin.R
+import okio.Utf8.size
+import java.nio.file.Files.size
 
-class ListAdapter // Provide a suitable constructor (depends on the kind of dataset)
+class ListAdapter (private val list: List<Elephant>) : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
+    // Provide a suitable constructor (depends on the kind of dataset)
 /*
 internal constructor(
     private val values: MutableList<String>,
     private val listner: OnItemClickListner
-) */
-    (private val values: MutableList<String> ):
+) (private val values: List<Elephant>):
     RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
     interface OnItemClickListner {
         fun onItemClick(item: Elephant?)
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+ */
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         // each data item is just a string in this case
-        var mImage = itemView.findViewById<ImageView>(R.id.icon)
-        var txtHeader: TextView
-        var txtFooter: TextView
+        val mImage : ImageView
+        val txtHeader: TextView
+        val txtFooter: TextView
 
         init {
-            txtHeader = view.findViewById<View>(R.id.firstLine) as TextView
-            txtFooter = view.findViewById<View>(R.id.secondLine) as TextView
+            txtHeader = view.findViewById(R.id.firstLine)
+            txtFooter = view.findViewById(R.id.secondLine)
+            mImage = itemView.findViewById(R.id.icon)
         }
     }
-
+/*
     fun add(position: Int, item: String) {
         values.add(position, item)
         notifyItemInserted(position)
@@ -42,6 +49,8 @@ internal constructor(
         values.removeAt(position)
         notifyItemRemoved(position)
     }
+
+ */
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(
@@ -58,28 +67,28 @@ internal constructor(
         holder: ViewHolder,
         position: Int
     ) {
-        val name = values[position]
-        holder.txtHeader.text = name
-        holder.txtHeader.setOnClickListener(View.OnClickListener() {
-            fun onClick(v: View?) {
-                remove(position)
-            }
-        })
-        holder.txtFooter.text = "Footer: $name"
-       /* val currentElephant = values[position]
+
+        val elephant : Elephant = list.get(position)
         //Picasso.get().load(currentElephant.Image()).resize(300, 300).into(holder.mImage)
-        holder.txtHeader.setText(currentElephant.getName())
-        holder.txtFooter.setText(currentElephant.getSex())
-        holder.itemView.setOnClickListener { listner.onItemClick(currentElephant) }
+        holder.txtHeader.text = elephant.name
+        holder.txtFooter.text = elephant.sex
+        holder.mImage.setImageResource(getCustomedIdentifier(holder, elephant.name!!))
 
-        */
     }
-
-
 
 
     override fun getItemCount(): Int {
-        return values.size
+        return list.size
     }
+
+    fun getCustomedIdentifier(viewHolder: ViewHolder, title : String) : Int {
+
+        val context : Context = viewHolder.itemView.context
+        val namePoster : String? = "poster_"+title?.toLowerCase()?.replace(" ", "_")?.replace("'", "_")
+        return context.resources.getIdentifier("drawable/"+namePoster, null, context.packageName);
+    }
+
+
+
 
 }
