@@ -1,6 +1,7 @@
 package com.example.projetkotlin.Details
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -50,23 +51,26 @@ class ElephantViewModel : ViewModel() {
 
         val elephantApi = retrofit.create(ElephantApi::class.java)
 
-        val call: Call<List<Elephant>> = elephantApi.getElephantResponse()
-        call.enqueue(object : Callback<List<Elephant>> {
+        val call: Call<RestElephantResponse> = elephantApi.getElephantResponse()
+        call.enqueue(object : Callback<RestElephantResponse> {
             override fun onResponse(
-                call: Call<List<Elephant>>,
-                response: Response<List<Elephant>>
+                call: Call<RestElephantResponse>,
+                response: Response<RestElephantResponse>
             ) {
                 if (response.isSuccessful() && response.body() != null) {
-                    eleph.value = response.body()
+                    eleph.value = response.body()!!.getResults()
                    apiCallResul.value = ApiCallSuccess
+                    Log.i("apical", "success")
                     //Toast.makeText(getApplicationContext(), "API Success", Toast.LENGTH_SHORT).show();
                 } else {
                     apiCallResul.value = ApiCallError
+                    Log.i("apical", "error")
                 }
             }
 
-            override fun onFailure(call: Call<List<Elephant>>, t: Throwable) {
+            override fun onFailure(call: Call<RestElephantResponse>, t: Throwable) {
                 apiCallResul.value = ApiCallError
+                Log.i("apical", "fail")
             }
         })
     }
